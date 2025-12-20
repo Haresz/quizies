@@ -6,6 +6,7 @@
     let alreadyChoseCategorry = $state(false);
     let selectedCategory = $state(null);
     let selectedLevel = $state(null);
+    let quizie = $state([]);
 
     function handleSearch(searchTerm) {
         console.log("Searching for:", searchTerm);
@@ -19,10 +20,28 @@
     function handleLevelSelect(level) {
         selectedLevel = level;
         alreadyChoseCategorry = false;
+
+        handleGetQuiz();
     }
 
     function closeLevelSelection() {
         alreadyChoseCategorry = false;
+    }
+
+    async function handleGetQuiz() {
+        if (!selectedCategory || selectedLevel) return;
+
+        try {
+            const req = await fetch(
+                `https://opentdb.com/api.php?amount=10&category=${selectedCategory.id}&difficulty=${selectedLevel.id}`,
+            );
+
+            const res = await req.json();
+
+            quizie = res.results;
+        } catch (error) {
+            console.log(error);
+        }
     }
 </script>
 
