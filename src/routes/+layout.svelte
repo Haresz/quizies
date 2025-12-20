@@ -3,4 +3,6 @@
     import "../app.css";
 </script>
 
-{@render children()}
+<div class="max-w-7xl md:p-4 p-2">
+    {@render children()}
+</div>
