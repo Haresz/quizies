@@ -1,6 +1,8 @@
 <script>
     import InputSearch from "$lib/components/InputSearch.svelte";
+    import { globalQuiz } from "$lib/stores/index.js";
     import { categoriesData, levelsData } from "$lib/config/content.js";
+    import { goto } from "$app/navigation";
 
     let value = $state("");
     let alreadyChoseCategorry = $state(false);
@@ -29,7 +31,7 @@
     }
 
     async function handleGetQuiz() {
-        if (!selectedCategory || selectedLevel) return;
+        if (!selectedCategory || !selectedLevel) return;
 
         try {
             const req = await fetch(
@@ -39,6 +41,11 @@
             const res = await req.json();
 
             quizie = res.results;
+            globalQuiz.set(quizie);
+
+            if ($globalQuiz.length >= 0) {
+                goto("/quiz");
+            }
         } catch (error) {
             console.log(error);
         }
