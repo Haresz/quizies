@@ -110,24 +110,32 @@
 
     <!-- items categoryy quiz -->
     <div
-        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"
+        class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"
         in:fly={{ y: 10, delay: 300, duration: 500 }}
     >
         {#each filteredCategories as item, index}
             <button
                 onclick={() => handleCategorySelect(item)}
-                class="group relative p-6 rounded-2xl border-4 border-[#CC5500] bg-white hover:shadow-xl transform transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+                class=" cursor-pointer group relative w-full p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-[6px] border-b-slate-200 transition-all duration-200 ease-out transform hover:-translate-y-2 hover:border-orange-300 hover:border-b-orange-400 hover:shadow-lg hover:shadow-orange-100 active:translate-y-1 active:border-b-[0px] active:shadow-none overflow-hidden"
                 style="animation-delay: {index * 50}ms"
             >
+                <img
+                    src={"/fox.png"}
+                    alt="Fox decoration"
+                    class="absolute -bottom-4 -right-4 w-24 h-24 object-contain opacity-30 grayscale contrast-50 pointer-events-none group-hover:opacity-50 group-hover:grayscale-0 transition-all duration-300"
+                />
+
                 <div
-                    class="flex flex-col items-center justify-center space-y-3"
+                    class="relative z-10 flex flex-col items-center justify-center space-y-4"
                 >
-                    <div class="text-[#FF6B00]">
-                        {@html item.icon}
+                    <div
+                        class="flex items-center justify-center w-16 h-16 rounded-full bg-orange-50 text-[#FF6B00] group-hover:bg-[#FF6B00] group-hover:text-white transition-colors duration-200"
+                    >
+                        <div class="w-8 h-8">{@html item.icon}</div>
                     </div>
                     <h3
-                        class="text-sm font-bold text-center"
-                        style="font-family: 'Nunito', sans-serif; color: #4A4A4A;"
+                        class="text-base font-bold text-center text-slate-600 group-hover:text-[#FF6B00] transition-colors"
+                        style="font-family: 'Nunito', sans-serif;"
                     >
                         {item.name}
                     </h3>
