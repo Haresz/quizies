@@ -10,6 +10,7 @@
 	function handleInput(event: Event) {
 		const target = event.target as HTMLInputElement;
 		value = target.value;
+		onSearch(value);
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
