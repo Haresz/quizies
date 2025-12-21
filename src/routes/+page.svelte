@@ -9,6 +9,7 @@
     let selectedCategory = $state(null);
     let selectedLevel = $state(null);
     let quizie = $state([]);
+    let isLoading = $state(false);
 
     function handleSearch(searchTerm) {
         console.log("Searching for:", searchTerm);
@@ -19,11 +20,11 @@
         alreadyChoseCategorry = true;
     }
 
-    function handleLevelSelect(level) {
+    async function handleLevelSelect(level) {
         selectedLevel = level;
-        alreadyChoseCategorry = false;
 
-        handleGetQuiz();
+        await handleGetQuiz();
+        alreadyChoseCategorry = false;
     }
 
     function closeLevelSelection() {
@@ -32,6 +33,8 @@
 
     async function handleGetQuiz() {
         if (!selectedCategory || !selectedLevel) return;
+
+        isLoading = true;
 
         try {
             const req = await fetch(
@@ -48,6 +51,8 @@
             }
         } catch (error) {
             console.log(error);
+        } finally {
+            isLoading = false;
         }
     }
 </script>
@@ -106,7 +111,10 @@
                 {#each levelsData as level}
                     <button
                         onclick={() => handleLevelSelect(level)}
-                        class="flex flex-col justify-center items-center p-6 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
+                        disabled={isLoading}
+                        class="flex flex-col justify-center items-center p-6 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all {isLoading
+                            ? 'opacity-50 cursor-not-allowed'
+                            : ''}"
                     >
                         <h3 class="text-lg font-semibold text-gray-800 mb-2">
                             {level.name}
@@ -119,4 +127,17 @@
             </div>
         </div>
     </div>
+
+    {#if isLoading}
+        <div
+            class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50"
+        >
+            <div class="flex flex-col items-center">
+                <div
+                    class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"
+                ></div>
+                <p class="mt-4 text-gray-700">Loading quiz questions...</p>
+            </div>
+        </div>
+    {/if}
 {/if}
