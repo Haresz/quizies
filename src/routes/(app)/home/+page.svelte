@@ -116,7 +116,7 @@
         {#each filteredCategories as item, index}
             <button
                 onclick={() => handleCategorySelect(item)}
-                class=" cursor-pointer group relative w-full p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-[6px] border-b-slate-200 transition-all duration-200 ease-out transform hover:-translate-y-2 hover:border-orange-300 hover:border-b-orange-400 hover:shadow-lg hover:shadow-orange-100 active:translate-y-1 active:border-b-[0px] active:shadow-none overflow-hidden"
+                class=" cursor-pointer group relative w-full p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-[6px] border-b-slate-200 transition-all duration-200 ease-out transform hover:-translate-y-2 hover:border-orange-300 hover:border-b-orange-400 hover:shadow-lg hover:shadow-orange-100 active:translate-y-1 active:border-b-0 active:shadow-none overflow-hidden"
                 style="animation-delay: {index * 50}ms"
             >
                 <img
