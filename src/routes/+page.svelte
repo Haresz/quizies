@@ -1,15 +1,10 @@
 <script>
     import { onMount } from "svelte";
-
-    let buttonPressed = false;
+    import Button3D from "$lib/components/Buttton3D.svelte";
 
     const handlePlayNow = () => {
-        buttonPressed = true;
-        setTimeout(() => {
-            buttonPressed = false;
-            // Navigate to home page to select quiz category
-            // window.location.href = "/home";
-        }, 200);
+        // Navigate to home page to select quiz category
+        window.location.href = "/home";
     };
 </script>
 
@@ -23,13 +18,15 @@
     />
 </svelte:head>
 
-<div class="min-h-screen w-full flex flex-col bg-[#FAF9E6] overflow-hidden">
+<div
+    class="min-h-screen w-full md:-mt-20 flex flex-col justify-center gap-16 bg-[#FAF9E6] overflow-hidden"
+>
     <!-- Main App Container -->
-    <div class="flex-1 flex flex-col justify-between w-full md:mx-auto">
+    <div class=" flex flex-col justify-between w-full md:mx-auto">
         <!-- Top Section with Logo and Button -->
-        <div class="flex-1 flex flex-col items-center justify-center p-6 pt-12">
+        <div class="flex-1 flex flex-col items-center justify-center p-6">
             <!-- Logo and Title -->
-            <div class="text-center mb-8">
+            <div class="text-center mb-4">
                 <h1
                     class="font-bold text-6xl mb-2"
                     style="font-family: 'Fredoka One', cursive; color: #FF6B00; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);"
@@ -43,25 +40,32 @@
                     Join and play to get a wider knowledge insight
                 </p>
             </div>
-
-            <!-- Play Now Button -->
-            <div class="w-full max-w-xs">
-                <button
-                    class="w-full cursor-pointer bg-[#FF6B00] hover:bg-[#E55A00] text-white font-bold py-4 px-6 rounded-xl text-xl transition-all duration-150 transform border-b-[6px] border-[#CC5500] {buttonPressed
-                        ? 'translate-y-1.5'
-                        : ''}"
-                    style="font-family: 'Nunito', sans-serif;  {!buttonPressed &&
-                        'box-shadow: 0 6px 0 #CC5500;'}"
-                    class:border-b-4={buttonPressed}
-                    on:click={handlePlayNow}
-                >
-                    Play Now
-                </button>
-            </div>
         </div>
 
         <!-- Bottom Section with Illustration -->
-        <div class="relative h-64 w-full"></div>
+        <div
+            class=" flex-col justify-center items-center relative max-w-xs mx-auto p-6"
+        >
+            <img
+                src="/fox.png"
+                style="margin-bottom: -50px;"
+                class="max-h-80"
+                alt="ilustration"
+            />
+            <!-- Play Now Button -->
+            <div class="w-full max-w-xs">
+                <Button3D
+                    text="Play Now"
+                    bgColor="#FF6B00"
+                    shadowColor="#CC5500"
+                    textColor="#FFFFFF"
+                    size="md"
+                    outlineWidth={6}
+                    fullWidth={true}
+                    on:click={handlePlayNow}
+                />
+            </div>
+        </div>
     </div>
 </div>
 
@@ -81,10 +85,6 @@
         width: 100%;
         margin: 0;
         padding: 0;
-    }
-
-    .translate-y-1 {
-        transform: translateY(4px);
     }
 
     /* Responsive adjustments */
