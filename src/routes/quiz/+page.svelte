@@ -7,6 +7,8 @@
     let isLoading = $state(true);
     let progress = $state(0);
     let interval = $state(null);
+    let questionTimeLimit = $state(30);
+    let timeRemaining = $state(30);
     let activeQuestion = $state(0);
     let answers = $state("");
     let showResult = $state(false);
@@ -47,6 +49,8 @@
         });
 
         isLoading = false;
+        // Start timer for first question
+        startQuestionTimer();
     }
 
     function handleNext() {
@@ -59,17 +63,33 @@
         answers = "";
 
         activeQuestion += 1;
+
+        if (activeQuestion < quizies.length) {
+            startQuestionTimer();
+        }
+    }
+
+    function startQuestionTimer() {
+        progress = 0;
+        timeRemaining = questionTimeLimit;
+
+        if (interval) {
+            clearInterval(interval);
+        }
+
+        interval = setInterval(() => {
+            if (timeRemaining > 0) {
+                timeRemaining -= 0.1;
+                progress = (1 - timeRemaining / questionTimeLimit) * 100;
+            } else {
+                clearInterval(interval);
+                handleNext();
+            }
+        }, 100);
     }
 
     onMount(() => {
         isLoading = true;
-        interval = setInterval(() => {
-            if (progress < 100) {
-                progress += 3; // speed control
-            } else {
-                clearInterval(interval);
-            }
-        }, 300);
 
         if ($globalQuiz.length > 0) {
             handleComposeQuiz();
@@ -77,16 +97,20 @@
             goto("/");
         }
 
-        return () => clearInterval(interval);
+        return () => {
+            if (interval) {
+                clearInterval(interval);
+            }
+        };
     });
 </script>
 
 <div class="flex justify-between border-b border-gray-300 pb-4 relative">
     <h2>Quizzes categories</h2>
-    <p>{activeQuestion + 1}/10</p>
+    <p>{activeQuestion + 1}/10 - {Math.ceil(timeRemaining)}s</p>
 
     <div
-        class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-75"
+        class="absolute bottom-0 left-0 h-0.5 bg-blue-500 transition-all duration-100"
         style="width: {progress}%;"
     ></div>
 </div>
@@ -133,7 +157,7 @@
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-2xl font-bold text-gray-800">Result Quiz</h2>
                 <button
-                    onclick={closeLevelSelection}
+                    onclick={() => (showResult = false)}
                     class="text-gray-500 hover:text-gray-700 text-2xl font-bold"
                 >
                     ×
