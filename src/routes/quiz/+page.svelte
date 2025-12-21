@@ -149,7 +149,7 @@
     </div>
 
     <div
-        class="absolute bottom-0 left-0 h-2 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-100 ease-out"
+        class="absolute bottom-0 left-0 h-2 bg-linear-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-100 ease-out"
         style="width: {progress}%;"
     ></div>
 </div>
@@ -243,7 +243,7 @@
             <div class="text-center mb-8">
                 <div class="mb-6">
                     <div
-                        class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 text-white text-5xl font-bold font-outfit shadow-lg"
+                        class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-linear-to-br from-blue-400 to-blue-600 text-white text-5xl font-bold font-outfit shadow-lg"
                     >
                         {results.correct}
                     </div>
@@ -293,7 +293,7 @@
                 ? 'border-green-400'
                 : 'border-red-400'}"
         >
-            <div class="flex-shrink-0">
+            <div class="shrink-0">
                 {#if lastAnswerCorrect}
                     <div
                         class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"
