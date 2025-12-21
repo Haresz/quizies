@@ -3,6 +3,7 @@
     import { globalQuiz } from "$lib/stores/index.js";
     import { categoriesData, levelsData } from "$lib/config/content.js";
     import { goto } from "$app/navigation";
+    import { fade, fly, scale } from "svelte/transition";
 
     let value = $state("");
     let alreadyChoseCategorry = $state(false);
@@ -58,14 +59,19 @@
 </script>
 
 <!-- wording for quiz -->
-<h1 class="text-3xl font-bold text-gray-800 mt-8 mb-2">
-    Discover Amazing Quizzes
-</h1>
-<p class="text-gray-600 mb-8">
-    Test your knowledge with our wide variety of quiz categories
-</p>
+<div class="text-center mb-12" in:fly={{ y: -20, duration: 500 }}>
+    <h1 class="text-5xl font-bold text-slate-800 mb-4 font-outfit">
+        Discover Amazing Quizzes
+    </h1>
+    <p class="text-xl text-slate-600 max-w-2xl mx-auto font-inter">
+        Test your knowledge with our wide variety of quiz categories
+    </p>
+</div>
 
-<div class="flex mt-10 mb-12 max-w-2xl">
+<div
+    class="flex justify-center mb-12 max-w-2xl mx-auto"
+    in:fly={{ y: -10, delay: 200, duration: 500 }}
+>
     <!-- for input search -->
     <InputSearch
         {value}
@@ -75,53 +81,83 @@
 </div>
 
 <!-- items categoryy quiz -->
-<div class="w-full flex md:justify-start justify-center flex-wrap gap-2">
-    {#each categoriesData as item}
+<div
+    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12"
+    in:fly={{ y: 10, delay: 300, duration: 500 }}
+>
+    {#each categoriesData as item, index}
         <button
             onclick={() => handleCategorySelect(item)}
-            class="cursor-pointer flex justify-center items-center sm:max-w-60 w-full h-40 border border-stone-400 rounded-md hover:bg-gray-50 transition-colors"
+            class="group relative p-6 rounded-3xl border-2 {item.borderColor} {item.color} hover:shadow-lg transform transition-all duration-300 hover:scale-105 hover:-translate-y-1"
+            style="animation-delay: {index * 50}ms"
         >
-            <h2>{item.name}</h2>
+            <div class="flex flex-col items-center justify-center space-y-3">
+                {@html item.icon}
+                <h3
+                    class="text-sm font-semibold text-slate-800 text-center font-inter"
+                >
+                    {item.name}
+                </h3>
+            </div>
         </button>
     {/each}
 </div>
 
 {#if alreadyChoseCategorry}
     <div
-        class="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50"
+        class="fixed inset-0 bg-white bg-opacity-60 flex items-center justify-center z-50 backdrop-blur-sm"
+        in:fade={{ duration: 300 }}
+        out:fade={{ duration: 300 }}
     >
-        <div class="bg-white rounded-lg p-6 max-w-2xl w-full -mt-24 mx-4">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800">
+        <div
+            class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 shadow-2xl transform transition-all"
+            in:scale={{ duration: 300 }}
+            out:scale={{ duration: 300 }}
+        >
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-3xl font-bold text-slate-800 font-outfit">
                     Select Difficulty Level
                 </h2>
                 <button
                     onclick={closeLevelSelection}
-                    class="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                    class="text-slate-500 hover:text-slate-700 text-3xl font-bold transition-colors"
                 >
                     ×
                 </button>
             </div>
 
-            <p class="text-gray-600 mb-6">
-                Choose a difficulty level for {selectedCategory?.name}
+            <p class="text-lg text-slate-600 mb-8 font-inter">
+                Choose a difficulty level for <span
+                    class="font-semibold text-slate-800"
+                    >{selectedCategory?.name}</span
+                >
             </p>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {#each levelsData as level}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {#each levelsData as level, index}
                     <button
                         onclick={() => handleLevelSelect(level)}
                         disabled={isLoading}
-                        class="flex flex-col justify-center items-center p-6 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all {isLoading
+                        class="group relative p-6 rounded-2xl border-2 {level.borderColor} {level.color} {level.hoverColor} transition-all duration-300 {isLoading
                             ? 'opacity-50 cursor-not-allowed'
-                            : ''}"
+                            : 'hover:shadow-lg hover:scale-105'}"
+                        style="animation-delay: {index * 100}ms"
                     >
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">
-                            {level.name}
-                        </h3>
-                        <p class="text-sm text-gray-600 text-center">
-                            {level.description}
-                        </p>
+                        <div
+                            class="flex flex-col items-center justify-center space-y-3"
+                        >
+                            {@html level.icon}
+                            <h3
+                                class="text-xl font-bold text-slate-800 font-outfit"
+                            >
+                                {level.name}
+                            </h3>
+                            <p
+                                class="text-sm text-slate-600 text-center font-inter"
+                            >
+                                {level.description}
+                            </p>
+                        </div>
                     </button>
                 {/each}
             </div>
@@ -130,13 +166,24 @@
 
     {#if isLoading}
         <div
-            class="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50"
+            class="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50 backdrop-blur-sm"
+            in:fade={{ duration: 300 }}
         >
-            <div class="flex flex-col items-center">
-                <div
-                    class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"
-                ></div>
-                <p class="mt-4 text-gray-700">Loading quiz questions...</p>
+            <div
+                class="flex flex-col items-center space-y-4 bg-white rounded-3xl p-8 shadow-2xl"
+                in:scale={{ duration: 300 }}
+            >
+                <div class="relative">
+                    <div
+                        class="animate-spin rounded-full h-16 w-16 border-4 border-slate-200"
+                    ></div>
+                    <div
+                        class="animate-spin rounded-full h-16 w-16 border-4 border-blue-500 border-t-transparent absolute top-0 left-0"
+                    ></div>
+                </div>
+                <p class="text-xl font-semibold text-slate-700 font-inter">
+                    Loading quiz questions...
+                </p>
             </div>
         </div>
     {/if}
