@@ -6,9 +6,27 @@
     let quizies = $state([]);
     let isLoading = $state(true);
     let progress = $state(0);
-    let interval = $state();
+    let interval = $state(null);
     let activeQuestion = $state(0);
     let answers = $state("");
+    let showResult = $state(false);
+    let results = $state({});
+
+    function handleCalculate() {
+        let correct = 0;
+        let incorrect = 0;
+
+        for (let index = 0; index < quizies.length; index++) {
+            if (quizies[index]?.answer === quizies[index].correct_answer) {
+                correct++;
+            } else {
+                incorrect++;
+            }
+        }
+
+        results = { correct, incorrect, total: 10 };
+        showResult = true;
+    }
 
     function handleComposeQuiz() {
         const _quizies = $globalQuiz;
@@ -24,6 +42,7 @@
             return {
                 question: q.question,
                 options,
+                correct_answer: q.correct_answer,
             };
         });
 
@@ -31,7 +50,11 @@
     }
 
     function handleNext() {
-        if (activeQuestion > 9) return;
+        if (activeQuestion >= 9) {
+            handleCalculate();
+            return;
+        }
+
         quizies[activeQuestion].answer = answers;
         answers = "";
 
@@ -99,6 +122,28 @@
         >
             Next
         </button>
+    </div>
+{/if}
+
+{#if showResult}
+    <div
+        class="fixed inset-0 bg-white bg-opacity-50 flex items-center justify-center z-50"
+    >
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full -mt-24 mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">Result Quiz</h2>
+                <button
+                    onclick={closeLevelSelection}
+                    class="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+                >
+                    ×
+                </button>
+            </div>
+
+            <div class="">
+                {results.correct} / {results.correct + results.incorrect}
+            </div>
+        </div>
     </div>
 {/if}
 
