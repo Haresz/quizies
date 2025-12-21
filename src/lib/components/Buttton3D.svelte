@@ -103,7 +103,7 @@
         ? ''
         : `box-shadow: 0 ${outlineWidth}px 0 ${computedShadowColor};`}
     "
-    on:click={handleClick}
+    onclick={handleClick}
 >
     {text}
 </button>
