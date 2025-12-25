@@ -13,6 +13,8 @@
     let quizie = $state([]);
     let isLoading = $state(false);
     let filteredCategories = $state(categoriesData);
+    let pressedButtons = $state({});
+    let closeButtonPressed = $state(false);
 
     function handleSearch(searchTerm) {
         if (!searchTerm.trim()) {
@@ -119,20 +121,9 @@
                 class=" cursor-pointer group relative w-full p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-[6px] border-b-slate-200 transition-all duration-200 ease-out transform hover:-translate-y-2 hover:border-orange-300 hover:border-b-orange-400 hover:shadow-lg hover:shadow-orange-100 active:translate-y-1 active:border-b-0 active:shadow-none overflow-hidden"
                 style="animation-delay: {index * 50}ms"
             >
-                <!-- <img
-                    src={item.img || "/fox.png"}
-                    alt="Fox decoration"
-                    class="absolute -bottom-4 -right-4 w-24 h-24 object-contain opacity-30 grayscale contrast-50 pointer-events-none group-hover:opacity-50 group-hover:grayscale-0 transition-all duration-300"
-                /> -->
-
                 <div
                     class="relative z-10 flex flex-col items-center justify-center space-y-4"
                 >
-                    <!-- <div
-                        class="flex items-center justify-center w-16 h-16 rounded-full bg-orange-50 text-[#FF6B00] group-hover:bg-[#FF6B00] group-hover:text-white transition-colors duration-200"
-                    >
-                        <div class="w-8 h-8">{@html item.icon}</div>
-                    </div> -->
                     <div class="flex items-center justify-center">
                         <img
                             src={item.img || "/fox.png"}
@@ -151,14 +142,15 @@
         {/each}
     </div>
 
+    <!-- popup levels -->
     {#if alreadyChoseCategorry}
         <div
-            class="fixed inset-0 bg-[#FAF9E6] bg-opacity-90 flex items-center justify-center z-50 backdrop-blur-sm"
+            class="fixed inset-0 bg-[#FAF9E6] bg-opacity-90 border-2 border-slate-200 border-b-[6px] border-b-slate-200 flex items-center justify-center z-50"
             in:fade={{ duration: 300 }}
             out:fade={{ duration: 300 }}
         >
             <div
-                class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 shadow-2xl transform transition-all border-4 border-[#CC5500]"
+                class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 transform transition-all"
                 in:scale={{ duration: 300 }}
                 out:scale={{ duration: 300 }}
             >
@@ -169,13 +161,12 @@
                     >
                         Select Difficulty Level
                     </h2>
-                    <button
-                        onclick={closeLevelSelection}
-                        class="text-4xl font-bold transition-colors hover:scale-110 transform"
-                        style="font-family: 'Fredoka One', cursive; color: #FF6B00;"
-                    >
-                        ×
-                    </button>
+                    <Button3D
+                        size="sm"
+                        text="X"
+                        outlineWidth={5}
+                        on:click={() => (alreadyChoseCategorry = false)}
+                    />
                 </div>
 
                 <p
@@ -191,12 +182,22 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {#each levelsData as level, index}
                         <button
-                            onclick={() => handleLevelSelect(level)}
+                            onclick={() => {
+                                pressedButtons[level.id] = true;
+                                setTimeout(
+                                    () => (pressedButtons[level.id] = false),
+                                    150,
+                                );
+                                handleLevelSelect(level);
+                            }}
                             disabled={isLoading}
-                            class="group relative p-6 rounded-2xl border-4 border-[#CC5500] bg-white hover:shadow-xl transition-all duration-300 {isLoading
-                                ? 'opacity-50 cursor-not-allowed'
-                                : 'hover:scale-105 hover:-translate-y-1'}"
-                            style="animation-delay: {index * 100}ms"
+                            class=" cursor-pointer group relative w-full p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-[6px] border-b-slate-200 transition-all duration-200 ease-out transform hover:-translate-y-2 hover:border-orange-300 hover:border-b-orange-400 hover:shadow-lg hover:shadow-orange-100 active:translate-y-1 active:border-b-0 active:shadow-none overflow-hidden"
+                            class:opacity-50={isLoading}
+                            class:cursor-not-allowed={isLoading}
+                            class:translate-y-1.5={pressedButtons[level.id]}
+                            class:border-b-0={pressedButtons[level.id]}
+                            class:hover:-translate-y-1={!isLoading &&
+                                !pressedButtons[level.id]}
                         >
                             <div
                                 class="flex flex-col items-center justify-center space-y-3"
@@ -229,8 +230,9 @@
                 in:fade={{ duration: 300 }}
             >
                 <div
-                    class="flex flex-col items-center space-y-6 bg-white rounded-3xl p-8 shadow-2xl border-4 border-[#CC5500]"
+                    class="flex flex-col items-center space-y-6 bg-white rounded-3xl p-8 transform transition-all"
                     in:scale={{ duration: 300 }}
+                    style="box-shadow: 0 8px 0 #CC5500; border-bottom: 8px solid #CC5500;"
                 >
                     <div class="relative">
                         <div
