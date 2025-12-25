@@ -119,19 +119,26 @@
                 class=" cursor-pointer group relative w-full p-6 rounded-3xl bg-white border-2 border-slate-200 border-b-[6px] border-b-slate-200 transition-all duration-200 ease-out transform hover:-translate-y-2 hover:border-orange-300 hover:border-b-orange-400 hover:shadow-lg hover:shadow-orange-100 active:translate-y-1 active:border-b-0 active:shadow-none overflow-hidden"
                 style="animation-delay: {index * 50}ms"
             >
-                <img
-                    src={"/fox.png"}
+                <!-- <img
+                    src={item.img || "/fox.png"}
                     alt="Fox decoration"
                     class="absolute -bottom-4 -right-4 w-24 h-24 object-contain opacity-30 grayscale contrast-50 pointer-events-none group-hover:opacity-50 group-hover:grayscale-0 transition-all duration-300"
-                />
+                /> -->
 
                 <div
                     class="relative z-10 flex flex-col items-center justify-center space-y-4"
                 >
-                    <div
+                    <!-- <div
                         class="flex items-center justify-center w-16 h-16 rounded-full bg-orange-50 text-[#FF6B00] group-hover:bg-[#FF6B00] group-hover:text-white transition-colors duration-200"
                     >
                         <div class="w-8 h-8">{@html item.icon}</div>
+                    </div> -->
+                    <div class="flex items-center justify-center">
+                        <img
+                            src={item.img || "/fox.png"}
+                            alt="Fox decoration"
+                            class=" w-24 h-24 object-contain opacity-30 grayscale contrast-80 pointer-events-none group-hover:opacity-90 group-hover:grayscale-0 transition-all duration-300"
+                        />
                     </div>
                     <h3
                         class="text-base font-bold text-center text-slate-600 group-hover:text-[#FF6B00] transition-colors"
