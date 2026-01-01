@@ -232,7 +232,7 @@
                 <div
                     class="flex flex-col items-center space-y-6 bg-white rounded-3xl p-8 transform transition-all"
                     in:scale={{ duration: 300 }}
-                    style="box-shadow: 0 8px 0 #CC5500; border-bottom: 8px solid #CC5500;"
+                    style="box-shadow: 0 8px 0 #CC5500; border-bottom: 2px solid #CC5500;"
                 >
                     <div class="relative">
                         <div

@@ -117,7 +117,7 @@
     });
 </script>
 
-<div class="flex justify-between items-center pb-6 relative mb-8">
+<div class="flex justify-between items-center pb-6 relative my-8 mx-4">
     <h2 class="text-2xl font-bold text-slate-800 font-outfit">
         Quiz Challenge
     </h2>
@@ -156,7 +156,7 @@
 
 {#if !isLoading}
     <!-- content -->
-    <div class="w-full my-12 mx-auto" in:fly={{ y: -20, duration: 500 }}>
+    <div class="w-full mt-12 mb-6 px-4" in:fly={{ y: -20, duration: 500 }}>
         <div
             class="p-6 text-xl font-medium text-slate-800 bg-white rounded-2xl shadow-sm border border-slate-200 font-inter"
         >
@@ -166,7 +166,7 @@
 
     <!-- options -->
     <div
-        class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
+        class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 px-4"
         in:fly={{ y: 10, delay: 100, duration: 500 }}
     >
         {#each quizies[activeQuestion].options as opt, index}
@@ -174,7 +174,7 @@
                 onclick={() => (answers = opt)}
                 class="group relative p-6 h-32 border-2 rounded-2xl transition-all duration-300 font-inter text-lg font-medium
                 {opt === answers
-                    ? 'border-blue-400 bg-blue-50 shadow-md transform scale-105'
+                    ? 'border-blue-400 bg-blue-50 shadow-md transform'
                     : 'border-slate-300 bg-white hover:border-blue-300 hover:bg-blue-50 hover:shadow-md hover:transform hover:scale-102'}"
                 style="animation-delay: {index * 50}ms"
             >
@@ -206,7 +206,7 @@
 
     <!-- button action -->
     <div
-        class="flex justify-end mt-8"
+        class="flex justify-end mt-8 px-4"
         in:fly={{ y: 10, delay: 200, duration: 500 }}
     >
         <button
