@@ -3,6 +3,7 @@
     import { globalQuiz } from "$lib/stores/index.js";
     import { goto } from "$app/navigation";
     import { fly, scale, fade } from "svelte/transition";
+    import Button3D from "$lib/components/Buttton3D.svelte";
 
     let quizies = $state([]);
     let isLoading = $state(true);
@@ -117,19 +118,27 @@
     });
 </script>
 
-<div class="flex justify-between items-center pb-6 relative my-8 mx-4">
-    <h2 class="text-2xl font-bold text-slate-800 font-outfit">
+<div class="flex justify-between items-center pb-6 relative mt-8 mx-4">
+    <h2
+        class="text-2xl font-bold"
+        style="font-family: 'Fredoka One', cursive; color: #FF6B00; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);"
+    >
         Quiz Challenge
     </h2>
     <div class="flex items-center space-x-4">
-        <div class="text-lg font-semibold text-slate-700 font-inter">
+        <div
+            class="text-lg font-semibold"
+            style="font-family: 'Nunito', sans-serif; color: #4A4A4A;"
+        >
             Question {activeQuestion + 1}/10
         </div>
         <div
-            class="flex items-center space-x-2 bg-slate-100 px-3 py-1 rounded-full"
+            class="flex items-center space-x-2 px-3 py-1 rounded-full"
+            style="background-color: #FFF8E1;"
         >
             <svg
-                class="w-5 h-5 text-slate-600"
+                class="w-5 h-5"
+                style="color: #FF6B00;"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -142,15 +151,17 @@
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
             </svg>
-            <span class="font-mono font-bold text-slate-700"
+            <span class="font-mono font-bold" style="color: #FF6B00; "
                 >{Math.ceil(timeRemaining)}s</span
             >
         </div>
     </div>
+</div>
 
+<div class="relative rounded-full h-2 my-4 mx-4 bg-[#E0E0E0]">
     <div
-        class="absolute bottom-0 left-0 h-2 bg-linear-to-r from-blue-400 to-blue-600 rounded-full transition-all duration-100 ease-out"
-        style="width: {progress}%;"
+        class="absolute bottom-0 left-0 h-2 rounded-full transition-all duration-100 ease-out ]"
+        style="width: {progress}%; background: linear-gradient(to right, #FF6B00, #CC5500); "
     ></div>
 </div>
 
@@ -158,7 +169,8 @@
     <!-- content -->
     <div class="w-full mt-12 mb-6 px-4" in:fly={{ y: -20, duration: 500 }}>
         <div
-            class="p-6 text-xl font-medium text-slate-800 bg-white rounded-2xl shadow-sm border border-slate-200 font-inter"
+            class="p-6 text-xl font-medium font-inter"
+            style="background-color: #FFFFFF; color: #4A4A4A; border-radius: 16px; border: 4px solid #FF6B00; box-shadow: 0 4px 0 #CC5500; font-family: 'Nunito', sans-serif;"
         >
             {quizies[activeQuestion].question}
         </div>
@@ -172,11 +184,18 @@
         {#each quizies[activeQuestion].options as opt, index}
             <button
                 onclick={() => (answers = opt)}
-                class="group relative p-6 h-32 border-2 rounded-2xl transition-all duration-300 font-inter text-lg font-medium
-                {opt === answers
-                    ? 'border-blue-400 bg-blue-50 shadow-md transform'
-                    : 'border-slate-300 bg-white hover:border-blue-300 hover:bg-blue-50 hover:shadow-md hover:transform hover:scale-102'}"
-                style="animation-delay: {index * 50}ms"
+                class="group relative p-6 h-32 transition-all rounded-3xl duration-300 font-inter text-lg font-medium"
+                style="animation-delay: {index *
+                    50}ms; font-family: 'Nunito', sans-serif; background-color: {opt ===
+                answers
+                    ? '#FFF8E1'
+                    : '#FFFFFF'}; border: 4px solid {opt === answers
+                    ? '#FF6B00'
+                    : '#E0E0E0'}; box-shadow: 0 6px 0 {opt === answers
+                    ? '#CC5500'
+                    : '#CCCCCC'}; transform: {opt === answers
+                    ? 'translateY(-2px)'
+                    : 'translateY(0)'};"
             >
                 <div class="flex items-center justify-center h-full">
                     <span class="text-center">{opt}</span>
@@ -184,7 +203,8 @@
                 {#if opt === answers}
                     <div class="absolute top-3 right-3">
                         <div
-                            class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center"
+                            class="w-6 h-6 rounded-full flex items-center justify-center"
+                            style="background-color: #FF6B00; box-shadow: 0 3px 0 #CC5500;"
                         >
                             <svg
                                 class="w-4 h-4 text-white"
@@ -209,13 +229,17 @@
         class="flex justify-end mt-8 px-4"
         in:fly={{ y: 10, delay: 200, duration: 500 }}
     >
-        <button
-            onclick={handleNext}
+        <Button3D
+            text={activeQuestion >= 9 ? "Finish Quiz" : "Next Question"}
+            bgColor="#FF6B00"
+            shadowColor="#CC5500"
+            textColor="#FFFFFF"
+            size="md"
+            outlineWidth={6}
+            fullWidth={false}
             disabled={!answers}
-            class="px-8 py-3 bg-blue-500 text-white font-bold rounded-2xl shadow-lg hover:bg-blue-600 hover:shadow-xl transform transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none font-outfit"
-        >
-            {activeQuestion >= 9 ? "Finish Quiz" : "Next Question"}
-        </button>
+            on:click={handleNext}
+        />
     </div>
 {/if}
 
@@ -225,16 +249,21 @@
         in:fade={{ duration: 300 }}
     >
         <div
-            class="bg-white rounded-3xl p-8 max-w-2xl w-full mx-4 shadow-2xl transform transition-all"
+            class="p-8 max-w-2xl w-full mx-4 transform transition-all"
+            style="background-color: #FFFFFF; border-radius: 16px; border: 4px solid #FF6B00; box-shadow: 0 12px 0 #CC5500; font-family: 'Nunito', sans-serif;"
             in:scale={{ duration: 300 }}
         >
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-bold text-slate-800 font-outfit">
+                <h2
+                    class="text-3xl font-bold"
+                    style="font-family: 'Fredoka One', cursive; color: #FF6B00; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);"
+                >
                     Quiz Results
                 </h2>
                 <button
                     onclick={() => (showResult = false)}
-                    class="text-slate-500 hover:text-slate-700 text-3xl font-bold transition-colors"
+                    class="text-3xl font-bold transition-colors"
+                    style="color: #4A4A4A; font-family: 'Nunito', sans-serif;"
                 >
                     ×
                 </button>
@@ -243,40 +272,55 @@
             <div class="text-center mb-8">
                 <div class="mb-6">
                     <div
-                        class="inline-flex items-center justify-center w-32 h-32 rounded-full bg-linear-to-br from-blue-400 to-blue-600 text-white text-5xl font-bold font-outfit shadow-lg"
+                        class="inline-flex items-center justify-center w-32 h-32 rounded-full text-white text-5xl font-bold shadow-lg"
+                        style="background: linear-gradient(to bottom right, #FF6B00, #CC5500); box-shadow: 0 8px 0 #AA4400; font-family: 'Fredoka One', cursive;"
                     >
                         {results.correct}
                     </div>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-800 mb-2 font-outfit">
+                <h3
+                    class="text-2xl font-bold mb-2"
+                    style="font-family: 'Fredoka One', cursive; color: #FF6B00; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);"
+                >
                     {results.correct >= 7
                         ? "Great Job!"
                         : results.correct >= 4
                           ? "Good Effort!"
                           : "Keep Practicing!"}
                 </h3>
-                <p class="text-lg text-slate-600 font-inter">
+                <p
+                    class="text-lg"
+                    style="font-family: 'Nunito', sans-serif; color: #4A4A4A;"
+                >
                     You got {results.correct} out of {results.correct +
                         results.incorrect} questions correct
                 </p>
             </div>
 
             <div class="flex justify-center space-x-4">
-                <button
-                    onclick={() => goto("/")}
-                    class="px-6 py-3 bg-slate-200 text-slate-800 font-bold rounded-2xl hover:bg-slate-300 transition-colors font-outfit"
-                >
-                    Back to Home
-                </button>
-                <button
-                    onclick={() => {
+                <Button3D
+                    text="Back to Home"
+                    bgColor="#E0E0E0"
+                    shadowColor="#CCCCCC"
+                    textColor="#4A4A4A"
+                    size="md"
+                    outlineWidth={6}
+                    fullWidth={false}
+                    on:click={() => goto("/")}
+                />
+                <Button3D
+                    text="Try Another Quiz"
+                    bgColor="#FF6B00"
+                    shadowColor="#CC5500"
+                    textColor="#FFFFFF"
+                    size="md"
+                    outlineWidth={6}
+                    fullWidth={false}
+                    on:click={() => {
                         showResult = false;
                         goto("/");
                     }}
-                    class="px-6 py-3 bg-blue-500 text-white font-bold rounded-2xl hover:bg-blue-600 transition-colors font-outfit"
-                >
-                    Try Another Quiz
-                </button>
+                />
             </div>
         </div>
     </div>
@@ -289,17 +333,20 @@
         out:fly={{ x: 50, duration: 300 }}
     >
         <div
-            class="bg-white rounded-2xl shadow-xl p-4 flex items-center space-x-3 border-2 {lastAnswerCorrect
-                ? 'border-green-400'
-                : 'border-red-400'}"
+            class="p-4 flex items-center space-x-3"
+            style="background-color: #FFFFFF; border-radius: 16px; box-shadow: 0 8px 0 rgba(0,0,0,0.1); font-family: 'Nunito', sans-serif; border: 4px solid {lastAnswerCorrect
+                ? '#4CAF50'
+                : '#F44336'};"
         >
             <div class="shrink-0">
                 {#if lastAnswerCorrect}
                     <div
-                        class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center"
+                        class="w-10 h-10 rounded-full flex items-center justify-center"
+                        style="background-color: #E8F5E9;"
                     >
                         <svg
-                            class="w-6 h-6 text-green-600"
+                            class="w-6 h-6"
+                            style="color: #4CAF50;"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -315,10 +362,12 @@
                     </div>
                 {:else}
                     <div
-                        class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center"
+                        class="w-10 h-10 rounded-full flex items-center justify-center"
+                        style="background-color: #FFEBEE;"
                     >
                         <svg
-                            class="w-6 h-6 text-red-600"
+                            class="w-6 h-6"
+                            style="color: #F44336;"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -335,10 +384,16 @@
                 {/if}
             </div>
             <div>
-                <p class="font-bold text-slate-800 font-inter">
+                <p
+                    class="font-bold"
+                    style="color: #4A4A4A; font-family: 'Nunito', sans-serif;"
+                >
                     {lastAnswerCorrect ? "Correct!" : "Incorrect"}
                 </p>
-                <p class="text-sm text-slate-600 font-inter">
+                <p
+                    class="text-sm"
+                    style="color: #4A4A4A; font-family: 'Nunito', sans-serif;"
+                >
                     {lastAnswerCorrect
                         ? "Great job!"
                         : "Better luck next time!"}
@@ -349,6 +404,20 @@
 {/if}
 
 <style>
+    :global(body) {
+        background-color: #faf9e6;
+        margin: 0;
+        padding: 0;
+        font-family: "Nunito", sans-serif;
+        overflow-x: hidden;
+    }
+
+    :global(html) {
+        background-color: #faf9e6;
+        margin: 0;
+        padding: 0;
+    }
+
     @keyframes loading-line {
         0% {
             left: 0%;

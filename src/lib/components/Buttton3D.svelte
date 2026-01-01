@@ -11,6 +11,7 @@
         size = "md", // 'sm', 'md', 'lg'
         outlineWidth = 6, // Default 6px
         fullWidth = false,
+        disabled = false,
     } = $props();
 
     // State for button press animation using Svelte 5 state
@@ -46,6 +47,8 @@
 
     // Handle button click with animation
     function handleClick() {
+        if (disabled) return;
+
         buttonPressed = true;
         dispatch("click");
 
@@ -78,14 +81,14 @@
             fullWidth ? "w-full" : "",
             currentSize.padding,
             currentSize.fontSize,
-            "cursor-pointer",
+            disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer",
             "font-bold",
             "rounded-xl",
             "transition-all",
             "duration-150",
             "transform",
             `border-b-[${outlineWidth}px]`,
-            buttonPressed ? "translate-y-1.5" : "",
+            buttonPressed && !disabled ? "translate-y-1.5" : "",
         ]
             .filter(Boolean)
             .join(" "),
@@ -95,15 +98,16 @@
 <button
     class={buttonClasses}
     style="
-        background-color: {bgColor};
-        color: {textColor};
-        border-color: {computedShadowColor};
+        background-color: {disabled ? '#CCCCCC' : bgColor};
+        color: {disabled ? '#999999' : textColor};
+        border-color: {disabled ? '#999999' : computedShadowColor};
         font-family: 'Nunito', sans-serif;
-        {buttonPressed
+        {buttonPressed && !disabled
         ? ''
-        : `box-shadow: 0 ${outlineWidth}px 0 ${computedShadowColor};`}
+        : `box-shadow: 0 ${outlineWidth}px 0 ${disabled ? '#999999' : computedShadowColor};`}
     "
     onclick={handleClick}
+    {disabled}
 >
     {text}
 </button>
